@@ -30,31 +30,48 @@ let libraryContainer = document.getElementById('book-container')
 
 for (let id in library) {
     let book = document.createElement('div')
+
     let header = document.createElement('div')
     let author = document.createElement('p')
+    let deletePrompt = document.createElement('img')
+    let deletePromptCancel = document.createElement('img')
+
     let title = document.createElement('p')
     let pages = document.createElement('p')
-    let buttons = document.createElement('div')
+
+    let buttonsMain = document.createElement('div')
     let editButton = document.createElement('button')
     let doneButton = document.createElement('button')
-    let deleteSVG = document.createElement('img')
 
+    let buttonsDelete = document.createElement('div')
+    let cancelButton = document.createElement('button')
+    let deleteButton = document.createElement('button')
+
+
+    book.setAttribute('data-id', id)
+
+    book.className = 'book'
     header.className = 'book-header'
     title.className = 'book-title'
+    deletePromptCancel.className = 'hidden'
     pages.className = 'book-pages'
-    buttons.className = 'book-buttons'
+    buttonsMain.className = 'book-buttons'
     editButton.classList = 'btn-green'
     doneButton.classList = 'btn-primary'
+    buttonsDelete.className = 'book-buttons hidden'
+    cancelButton.classList = 'btn-green'
+    deleteButton.classList = 'btn-delete'
 
     // Book header (author, x button)
     author.textContent = library[id].author
-    deleteSVG.setAttribute('src', 'images/x.svg')
+    deletePrompt.setAttribute('src', 'images/x.svg')
+    deletePromptCancel.setAttribute('src', 'images/dash.svg')
+    deletePrompt.addEventListener('click', toggleDeleteMenu)
+    deletePromptCancel.addEventListener('click', toggleDeleteMenu)
 
     header.appendChild(author)
-    header.appendChild(deleteSVG)
-
-    console.log(library[id].title)
-    console.log(library[id].author)
+    header.appendChild(deletePrompt)
+    header.appendChild(deletePromptCancel)
 
     // Title
     title.textContent = library[id].title
@@ -65,16 +82,23 @@ for (let id in library) {
     // Buttons
     editButton.textContent = 'EDIT'
     doneButton.textContent = 'DONE'
+    cancelButton.textContent = 'CANCEL'
+    deleteButton.textContent = 'DELETE'
 
-    buttons.appendChild(editButton)
-    buttons.appendChild(doneButton)
+    buttonsMain.appendChild(editButton)
+    buttonsMain.appendChild(doneButton)
 
-    book.setAttribute('data-id', id)
-    book.setAttribute('class', 'book')
+    cancelButton.addEventListener('click', toggleDeleteMenu)
+    deleteButton.addEventListener('click', deleteBook)
+    buttonsDelete.appendChild(cancelButton)
+    buttonsDelete.appendChild(deleteButton)
+
+    // Book
     book.appendChild(header)
     book.appendChild(title)
     book.appendChild(pages)
-    book.appendChild(buttons)
+    book.appendChild(buttonsMain)
+    book.appendChild(buttonsDelete)
 
     libraryContainer.appendChild(book)
 
@@ -82,8 +106,18 @@ for (let id in library) {
 }
 
 function deleteBook() {
-    let id = this.parentNode.getAttribute('data-id')
+    let id = this.parentNode.parentNode.getAttribute('data-id')
 
-    this.parentNode.remove()
+    this.parentNode.parentNode.remove()
     delete library[id]
+}
+
+function toggleDeleteMenu() {
+    let book = this.parentNode.parentNode
+    book.childNodes[4].classList.toggle('hidden')
+    book.childNodes[3].classList.toggle('hidden')
+    book.childNodes[2].classList.toggle('hidden')
+
+    book.childNodes[0].childNodes[1].classList.toggle('hidden')
+    book.childNodes[0].childNodes[2].classList.toggle('hidden')
 }

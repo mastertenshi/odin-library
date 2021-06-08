@@ -13,6 +13,7 @@ p {
     margin: 0;
 }
 
+
 #container {
     display: flex;
     justify-content: center;
@@ -45,10 +46,11 @@ p {
 }
 
 .book-header img {
-    height: 12px;
-    width: 12px;
+    height: 14px;
+    width: 14px;
     cursor: pointer;
     padding-right: 2px;
+    padding-top: 2px;
 }
 
 .book-header p {
@@ -96,4 +98,35 @@ p {
 .btn-primary {
     background-color: #FFE26E;
     color: #636363
+}
+
+.btn-delete {
+    background-color: #E47757;
+    color: white;
+}
+
+.book-new {
+    display: flex;
+    /* flex-direction: column; */
+    margin: 65px;
+    width: 70px;
+    height: 70px;
+    align-self: center;
+    align-items: center;
+    justify-self: center;
+    justify-content: center;
+    border-radius: 20px;
+    background-color: #ffffff2f;
+    padding: 10px;
+    box-shadow: 5px 5px 3px #00000011;
+    cursor: pointer;
+}
+
+.book-new img {
+    height: 55px;
+    width: 55px;
+}
+
+.hidden {
+    display: none;
 }
