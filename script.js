@@ -30,25 +30,18 @@ let libraryContainer = document.getElementById('book-container')
 
 for (let id in library) {
     let book = document.createElement('div')
-
     let header = document.createElement('div')
     let author = document.createElement('p')
     let deletePrompt = document.createElement('img')
     let deletePromptCancel = document.createElement('img')
-
     let title = document.createElement('p')
     let pages = document.createElement('p')
-
     let buttonsMain = document.createElement('div')
     let editButton = document.createElement('button')
     let doneButton = document.createElement('button')
-
     let buttonsDelete = document.createElement('div')
     let cancelButton = document.createElement('button')
     let deleteButton = document.createElement('button')
-
-
-    book.setAttribute('data-id', id)
 
     book.className = 'book'
     header.className = 'book-header'
@@ -64,8 +57,10 @@ for (let id in library) {
 
     // Book header (author, x button)
     author.textContent = library[id].author
+
     deletePrompt.setAttribute('src', 'images/x.svg')
     deletePromptCancel.setAttribute('src', 'images/dash.svg')
+
     deletePrompt.addEventListener('click', toggleDeleteMenu)
     deletePromptCancel.addEventListener('click', toggleDeleteMenu)
 
@@ -85,15 +80,20 @@ for (let id in library) {
     cancelButton.textContent = 'CANCEL'
     deleteButton.textContent = 'DELETE'
 
+    // -main
     buttonsMain.appendChild(editButton)
     buttonsMain.appendChild(doneButton)
 
+    // -delete
     cancelButton.addEventListener('click', toggleDeleteMenu)
     deleteButton.addEventListener('click', deleteBook)
+
     buttonsDelete.appendChild(cancelButton)
     buttonsDelete.appendChild(deleteButton)
 
     // Book
+    book.setAttribute('data-id', id)
+
     book.appendChild(header)
     book.appendChild(title)
     book.appendChild(pages)
@@ -101,8 +101,6 @@ for (let id in library) {
     book.appendChild(buttonsDelete)
 
     libraryContainer.appendChild(book)
-
-    // deleteButton.addEventListener("click", deleteBook)
 }
 
 function deleteBook() {
@@ -114,10 +112,12 @@ function deleteBook() {
 
 function toggleDeleteMenu() {
     let book = this.parentNode.parentNode
-    book.childNodes[4].classList.toggle('hidden')
-    book.childNodes[3].classList.toggle('hidden')
+    // book-header
+    book.childNodes[0].childNodes[1].classList.toggle('hidden') // x.svg
+    book.childNodes[0].childNodes[2].classList.toggle('hidden') // dash.svg
+    // book-pages
     book.childNodes[2].classList.toggle('hidden')
-
-    book.childNodes[0].childNodes[1].classList.toggle('hidden')
-    book.childNodes[0].childNodes[2].classList.toggle('hidden')
+    // book-buttons
+    book.childNodes[3].classList.toggle('hidden') // main
+    book.childNodes[4].classList.toggle('hidden') // delete
 }
