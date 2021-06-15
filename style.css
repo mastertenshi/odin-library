@@ -141,6 +141,7 @@ p {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
+    word-break: break-word;
 }
 
 .book-header img {
@@ -154,13 +155,14 @@ p {
 .book-header p {
     line-height: 1.3;
     font-size: 0.95rem;
+    padding-right: 0.2rem;
 }
 
 .book-title {
     text-align: center;
     font-size: 1.15rem;
     padding-top: 0.8rem;
-
+    word-break: break-word;
 }
 
 .book-pages {

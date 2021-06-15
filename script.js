@@ -5,19 +5,19 @@ let libraryContainer = document.getElementById('book-container')
 let container = document.getElementById('container')
 
 let books = [
-    new Book('Sherlock Holmes', 'Arthur Conan Doyle', 1, 5000),
-    new Book('Harry Potter', 'J.K. Rowling', 1, 512),
-    new Book('12 Rules For Life', 'Jordan B. Peterson', 412, 412)
+    new Book('Arthur Conan Doyle', 'Sherlock Holmes', 5000, 1,),
+    new Book('J.K. Rowling', 'Harry Potter', 512, 1),
+    new Book('Jordan B. Peterson', '12 Rules For Life', 412, 412)
 ]
 
 let library = {}
 
 
-function Book(title, author, currentPage, totalPages) {
-    this.title = title
+function Book(author, title, totalPages, currentPage) {
     this.author = author
-    this.currentPage = currentPage
+    this.title = title
     this.totalPages = totalPages
+    this.currentPage = currentPage
 }
 Book.id = 0
 
