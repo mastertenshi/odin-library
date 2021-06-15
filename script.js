@@ -1,16 +1,8 @@
 'use strict'
 
-function Book(title, author, currentPage, totalPages) {
-    this.title = title
-    this.author = author
-    this.currentPage = currentPage
-    this.totalPages = totalPages
-}
-Book.id = 0
 
-// function addBookToLibrary() {
-
-// }
+let libraryContainer = document.getElementById('book-container')
+let container = document.getElementById('container')
 
 let books = [
     new Book('Sherlock Holmes', 'Arthur Conan Doyle', 1, 5000),
@@ -20,15 +12,16 @@ let books = [
 
 let library = {}
 
-for (let book of books) {
-    library[Book.id++] = book
+
+function Book(title, author, currentPage, totalPages) {
+    this.title = title
+    this.author = author
+    this.currentPage = currentPage
+    this.totalPages = totalPages
 }
+Book.id = 0
 
-
-let libraryContainer = document.getElementById('book-container')
-
-
-for (let id in library) {
+function addBookToLibrary(id) {
     let book = document.createElement('div')
     let header = document.createElement('div')
     let author = document.createElement('p')
@@ -49,10 +42,10 @@ for (let id in library) {
     deletePromptCancel.className = 'hidden'
     pages.className = 'book-pages'
     buttonsMain.className = 'book-buttons'
-    editButton.classList = 'btn-green'
+    editButton.classList = 'btn-secondary'
     doneButton.classList = 'btn-primary'
     buttonsDelete.className = 'book-buttons hidden'
-    cancelButton.classList = 'btn-green'
+    cancelButton.classList = 'btn-secondary'
     deleteButton.classList = 'btn-delete'
 
     // Book header (author, x button)
@@ -100,8 +93,11 @@ for (let id in library) {
     book.appendChild(buttonsMain)
     book.appendChild(buttonsDelete)
 
-    libraryContainer.appendChild(book)
+    let last = libraryContainer.childElementCount
+
+    libraryContainer.insertBefore(book, libraryContainer.childNodes[last])
 }
+
 
 function deleteBook() {
     let id = this.parentNode.parentNode.getAttribute('data-id')
@@ -120,4 +116,89 @@ function toggleDeleteMenu() {
     // book-buttons
     book.childNodes[3].classList.toggle('hidden') // main
     book.childNodes[4].classList.toggle('hidden') // delete
+}
+
+function denyNewline() {
+    this.value = this.value.replace(/[\t\n\r\v]+/g, '')
+}
+
+function newBook() {
+    let blockContainer = document.createElement('div')
+
+    let newBook = document.createElement('form')
+    let authorLabel = document.createElement('label')
+    let authorInput = document.createElement('textarea')
+    let titleLabel = document.createElement('label')
+    let titleInput = document.createElement('textarea')
+    let totalLabel = document.createElement('label')
+    let totalInput = document.createElement('input')
+    let currentLabel = document.createElement('label')
+    let currentInput = document.createElement('input')
+    let addButton = document.createElement('button')
+
+    blockContainer.className = 'block-container'
+    newBook.className = 'new-book'
+    addButton.className = 'btn btn-primary'
+
+    authorLabel.textContent = 'Author'
+    titleLabel.textContent = 'Title'
+    totalLabel.textContent = 'Total Pages'
+    currentLabel.textContent = 'Current Page'
+    addButton.textContent = 'ADD'
+
+    authorInput.setAttribute('maxlength', '40')
+    authorInput.setAttribute('id', 'author-input')
+    authorInput.setAttribute('autofocus', '')
+    authorInput.setAttribute('required', '')
+    authorInput.autofocus
+
+    titleInput.setAttribute('maxlength', '80')
+    titleInput.setAttribute('id', 'title-input')
+    titleInput.setAttribute('required', '')
+
+    totalInput.setAttribute('type', 'text')
+    totalInput.setAttribute('required', '')
+
+    currentInput.setAttribute('type', 'text')
+    currentInput.setAttribute('required', '')
+
+    addButton.setAttribute('type', 'submit')
+
+    authorInput.addEventListener('input', denyNewline)
+    titleInput.addEventListener('input', denyNewline)
+
+    addButton.addEventListener('click', function() {
+        if (authorInput.value !== '' && titleInput.value !== '' &&
+            totalInput.value !== '' && currentInput.value !== '') {
+                library[Book.id++] =
+                new Book(
+                    authorInput.value,
+                    titleInput.value,
+                    totalInput.value,
+                    currentInput.value)
+
+            addBookToLibrary(Book.id - 1)
+
+            newBook.remove()
+            blockContainer.remove()
+        }
+    })
+
+    newBook.appendChild(authorLabel)
+    newBook.appendChild(authorInput)
+    newBook.appendChild(titleLabel)
+    newBook.appendChild(titleInput)
+    newBook.appendChild(totalLabel)
+    newBook.appendChild(totalInput)
+    newBook.appendChild(currentLabel)
+    newBook.appendChild(currentInput)
+    newBook.appendChild(addButton)
+
+    container.appendChild(blockContainer)
+    container.appendChild(newBook)
+}
+
+for (let book of books) {
+    library[Book.id++] = book
+    addBookToLibrary(Book.id - 1)
 }
