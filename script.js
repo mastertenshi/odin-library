@@ -169,23 +169,20 @@ function newBook() {
     titleInput.addEventListener('input', denyNewline)
 
     totalInput.addEventListener('input', function() {
-        totalInput.value = totalInput.value.replace(/[^0-9]+/g, '')
-
-        let totalSize = totalInput.value.length
+        totalInput.value = totalInput.value.replace(/^0|[^0-9]+/g, '')
 
         let total = parseInt(totalInput.value)
-        let current = parseInt(currentInput.value)
 
         if (total) {
             // Max Book Size
             if (total > 10000) {
-                totalInput.value = totalInput.value.slice(0, totalSize - 1)
+                totalInput.value = totalInput.value.slice(0, -1)
             } else {
                 currentInput.setAttribute('placeholder', `1-${total}`)
 
-                // Keep Current page < Total pages
-                if (total < current) {
-                    currentInput.value = currentInput.value.slice(0, totalSize)
+                // Keep Current page number < Total pages
+                while (parseInt(currentInput.value) > parseInt(totalInput.value)) {
+                    currentInput.value = currentInput.value.slice(1)
                 }
             }
         } else {
@@ -195,16 +192,14 @@ function newBook() {
     })
 
     currentInput.addEventListener('input', function() {
-        currentInput.value = currentInput.value.replace(/[^0-9]+/g, '')
-
-        let currentSize = currentInput.value.length
+        currentInput.value = currentInput.value.replace(/^0|[^0-9]+/g, '')
 
         let current = parseInt(currentInput.value)
         let total = parseInt(totalInput.value)
 
         if (current) {
             if (current > total) {
-                currentInput.value = currentInput.value.slice(0, currentSize - 1)
+                currentInput.value = currentInput.value.slice(0, -1)
 
             } else if (! total) {
                 currentInput.value = ''
