@@ -79,7 +79,10 @@ function addBookToLibrary(id) {
 
     // -delete
     cancelButton.addEventListener('click', toggleDeleteMenu)
-    deleteButton.addEventListener('click', deleteBook)
+    deleteButton.addEventListener('click', function() {
+        delete library[id]
+        book.remove()
+    })
 
     buttonsDelete.appendChild(cancelButton)
     buttonsDelete.appendChild(deleteButton)
@@ -96,26 +99,17 @@ function addBookToLibrary(id) {
     let last = libraryContainer.childElementCount
 
     libraryContainer.insertBefore(book, libraryContainer.childNodes[last])
-}
 
-
-function deleteBook() {
-    let id = this.parentNode.parentNode.getAttribute('data-id')
-
-    this.parentNode.parentNode.remove()
-    delete library[id]
-}
-
-function toggleDeleteMenu() {
-    let book = this.parentNode.parentNode
-    // book-header
-    book.childNodes[0].childNodes[1].classList.toggle('hidden') // x.svg
-    book.childNodes[0].childNodes[2].classList.toggle('hidden') // dash.svg
-    // book-pages
-    book.childNodes[2].classList.toggle('hidden')
-    // book-buttons
-    book.childNodes[3].classList.toggle('hidden') // main
-    book.childNodes[4].classList.toggle('hidden') // delete
+    function toggleDeleteMenu() {
+        // book-header
+        deletePrompt.classList.toggle('hidden') // x.svg
+        deletePromptCancel.classList.toggle('hidden') // dash.svg
+        // book-pages
+        pages.classList.toggle('hidden')
+        // book-buttons
+        buttonsMain.classList.toggle('hidden')
+        buttonsDelete.classList.toggle('hidden')
+    }
 }
 
 function denyNewline() {
@@ -134,29 +128,36 @@ function newBook() {
     let totalInput = document.createElement('input')
     let currentLabel = document.createElement('label')
     let currentInput = document.createElement('input')
+    let buttons = document.createElement('div')
+    let cancelButton = document.createElement('button')
     let addButton = document.createElement('button')
 
     blockContainer.className = 'block-container'
     newBook.className = 'new-book'
-    addButton.className = 'btn btn-primary'
+    buttons.className = 'book-buttons'
+    addButton.className = 'btn-primary'
+    cancelButton.className = 'btn-secondary'
 
     authorLabel.textContent = 'Author'
     titleLabel.textContent = 'Title'
     totalLabel.textContent = 'Total Pages'
     currentLabel.textContent = 'Current Page'
     addButton.textContent = 'ADD'
+    cancelButton.textContent = 'CANCEL'
 
     authorInput.setAttribute('maxlength', '40')
     authorInput.setAttribute('id', 'author-input')
     authorInput.setAttribute('autofocus', '')
     authorInput.setAttribute('required', '')
-    authorInput.autofocus
 
     titleInput.setAttribute('maxlength', '80')
     titleInput.setAttribute('id', 'title-input')
     titleInput.setAttribute('required', '')
 
+    let exampleNumber = Math.floor((Math.random() * 890) + 101)
+
     totalInput.setAttribute('type', 'text')
+    totalInput.setAttribute('placeholder', `ex. ${exampleNumber.toString()}`)
     totalInput.setAttribute('required', '')
 
     currentInput.setAttribute('type', 'text')
@@ -167,10 +168,60 @@ function newBook() {
     authorInput.addEventListener('input', denyNewline)
     titleInput.addEventListener('input', denyNewline)
 
+    totalInput.addEventListener('input', function() {
+        totalInput.value = totalInput.value.replace(/[^0-9]+/g, '')
+
+        let totalSize = totalInput.value.length
+
+        let total = parseInt(totalInput.value)
+        let current = parseInt(currentInput.value)
+
+        if (total) {
+            // Max Book Size
+            if (total > 10000) {
+                totalInput.value = totalInput.value.slice(0, totalSize - 1)
+            } else {
+                currentInput.setAttribute('placeholder', `1-${total}`)
+
+                // Keep Current page < Total pages
+                if (total < current) {
+                    currentInput.value = currentInput.value.slice(0, totalSize)
+                }
+            }
+        } else {
+            currentInput.setAttribute('placeholder', '')
+            currentInput.value = ''
+        }
+    })
+
+    currentInput.addEventListener('input', function() {
+        currentInput.value = currentInput.value.replace(/[^0-9]+/g, '')
+
+        let currentSize = currentInput.value.length
+
+        let current = parseInt(currentInput.value)
+        let total = parseInt(totalInput.value)
+
+        if (current) {
+            if (current > total) {
+                currentInput.value = currentInput.value.slice(0, currentSize - 1)
+
+            } else if (! total) {
+                currentInput.value = ''
+            }
+        }
+    })
+
+    cancelButton.addEventListener('click', function() {
+        newBook.remove()
+        blockContainer.remove()
+    })
+
     addButton.addEventListener('click', function() {
         if (authorInput.value !== '' && titleInput.value !== '' &&
             totalInput.value !== '' && currentInput.value !== '') {
-                library[Book.id++] =
+
+            library[Book.id++] =
                 new Book(
                     authorInput.value,
                     titleInput.value,
@@ -192,7 +243,10 @@ function newBook() {
     newBook.appendChild(totalInput)
     newBook.appendChild(currentLabel)
     newBook.appendChild(currentInput)
-    newBook.appendChild(addButton)
+    newBook.appendChild(buttons)
+
+    buttons.appendChild(addButton)
+    buttons.appendChild(cancelButton)
 
     container.appendChild(blockContainer)
     container.appendChild(newBook)

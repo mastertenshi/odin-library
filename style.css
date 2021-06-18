@@ -15,12 +15,16 @@ input, textarea {
     font-size: 1rem;
 }
 
+::placeholder {
+    font-size: 0.9rem;
+}
+
 #title-input,
 #author-input {
     resize: none;
-    background-color: #BAE391;
     overflow: hidden;
     outline: none;
+    border-radius: 3px;
 }
 
 #title-input {
@@ -30,6 +34,7 @@ input, textarea {
 #author-input {
     height: 50px;
 }
+
 
 p {
     padding: 0;
@@ -77,6 +82,11 @@ p {
     padding: 10px;
     box-shadow: 5px 5px 3px #00000011;
     cursor: pointer;
+    transition: ease 0.2s;
+}
+
+.book-plus:hover {
+    transform: scale(1.2);
 }
 
 .new-book {
@@ -90,6 +100,7 @@ p {
     padding: 10px;
     box-shadow: 0 0 5px 8px #00000010;
     z-index: 100;
+    transition: ease 0.2s;
 }
 
 .block-container {
@@ -107,12 +118,12 @@ p {
     margin: 0;
 }
 
-.new-book button {
+/* .new-book button {
     align-self: flex-end;
     margin: 0;
     margin-right: 8px;
     justify-self: flex-end;
-}
+} */
 
 .new-book label {
     font-size: 0.8rem;
@@ -127,7 +138,7 @@ p {
     padding-left: 6px;
     /* padding: 8px; */
     color: #525252;
-    background-color: #BAE391;
+    background-color: #b4e087;
     margin-bottom: 16px;
     font-size: 1rem;
 }
@@ -179,6 +190,10 @@ p {
 .book-buttons {
     display: flex;
     justify-content: space-around
+}
+
+.new-book .book-buttons {
+    flex-direction: row-reverse;
 }
 
 .book-buttons button,
