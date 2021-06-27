@@ -40,6 +40,8 @@ function addBookToLibrary(id) {
     let cancelButton = document.createElement('button')
     let deleteButton = document.createElement('button')
 
+    let isRead = library[id].isRead
+
     book.className = 'book'
     header.className = 'book-header'
     title.className = 'book-title'
@@ -76,8 +78,15 @@ function addBookToLibrary(id) {
 
     pageLeftButton.textContent = "<"
     pageRightButton.textContent = ">"
-    pages.textContent = `${library[id].currentPage}/${library[id].totalPages}`
 
+    if (isRead) {
+        pages.textContent = `${library[id].totalPages}`
+
+        pageRightButton.classList.toggle('hidden')
+        pageLeftButton.classList.toggle('hidden')
+    } else {
+        pages.textContent = `${library[id].currentPage}/${library[id].totalPages}`
+    }
 
     let pageRightButtonInterval = null
     let pageLeftButtonInterval = null
@@ -137,9 +146,20 @@ function addBookToLibrary(id) {
     buttonsMain.appendChild(editButton)
     buttonsMain.appendChild(doneButton)
 
-    // doneButton.addEventListener('click', function() {
+    editButton.addEventListener('click', function() {
+        newBook(
+            author.textContent,
+            title.textContent,
+            library[id].totalPages,
+            library[id].currentPage,
+            library[id].isRead,
+            id
+        )
+    })
 
-    // })
+    doneButton.addEventListener('click', function() {
+
+    })
 
     // -delete
     cancelButton.addEventListener('click', toggleDeleteMenu)
@@ -180,7 +200,14 @@ function denyNewline() {
     this.value = this.value.replace(/[\t\n\r\v]+/g, '')
 }
 
-function newBook() {
+function newBook(
+    author = '',
+    title = '',
+    total = '',
+    current = '',
+    isRead = false,
+    id = -1
+) {
     let blockContainer = document.createElement('div')
 
     let newBook = document.createElement('form')
@@ -206,13 +233,24 @@ function newBook() {
     addButton.className = 'btn-primary'
     cancelButton.className = 'btn-secondary'
 
+    if (isRead) {
+        currentLabel.className = 'hidden'
+        currentInput.className = 'hidden'
+    }
+
     authorLabel.textContent = 'Author'
     titleLabel.textContent = 'Title'
     completedLabel.textContent = 'Completed'
     totalLabel.textContent = 'Total Pages'
     currentLabel.textContent = 'Current Page'
-    addButton.textContent = 'ADD'
+    addButton.textContent = 'SAVE'
     cancelButton.textContent = 'CANCEL'
+
+    authorInput.value = author
+    titleInput.value = title
+    totalInput.value = total
+    currentInput.value = current
+    completedCheckbox.checked = isRead
 
     authorInput.setAttribute('maxlength', '40')
     authorInput.setAttribute('id', 'author-input')
@@ -227,7 +265,6 @@ function newBook() {
     completedCheckbox.setAttribute('id', 'complete')
 
     completedLabel.setAttribute('for', 'complete')
-
 
     completed.appendChild(completedLabel)
     completed.appendChild(completedCheckbox)
@@ -273,12 +310,22 @@ function newBook() {
         let total = parseInt(totalInput.value)
 
         if (current) {
-            if (current > total) {
+            if (current >= total) {
                 currentInput.value = currentInput.value.slice(0, -1)
 
             } else if (! total) {
                 currentInput.value = ''
             }
+        }
+    })
+
+    completedCheckbox.addEventListener('change', function() {
+        if (completedCheckbox.checked) {
+            currentLabel.className = 'hidden'
+            currentInput.className = 'hidden'
+        } else {
+            currentLabel.className = ''
+            currentInput.className = ''
         }
     })
 
@@ -291,17 +338,28 @@ function newBook() {
         if (authorInput.value !== '' && titleInput.value !== '' &&
             totalInput.value !== '' && currentInput.value !== '') {
 
-            library[Book.id++] =
-                new Book(
+            if (id >= 0) {
+                library[id] = new Book(
                     authorInput.value,
                     titleInput.value,
                     parseInt(totalInput.value),
                     parseInt(currentInput.value),
-                    completedCheckbox.checked)
+                    completedCheckbox.checked
+                )
 
-            console.log(completedCheckbox.checked)
+                updateBook(id)
 
-            addBookToLibrary(Book.id - 1)
+            } else {
+                library[Book.id++] = new Book(
+                    authorInput.value,
+                    titleInput.value,
+                    parseInt(totalInput.value),
+                    parseInt(currentInput.value),
+                    completedCheckbox.checked
+                )
+
+                addBookToLibrary(Book.id - 1)
+            }
 
             newBook.remove()
             blockContainer.remove()
@@ -324,6 +382,26 @@ function newBook() {
 
     container.appendChild(blockContainer)
     container.appendChild(newBook)
+}
+
+function updateBook(id) {
+    let book = document.querySelectorAll(`[data-id='${id}']`)
+    book = book[0]
+
+    book.childNodes[0].childNodes[0].textContent = library[id].author
+    book.childNodes[1].textContent = library[id].title
+
+    if (library[id].isRead) {
+        book.childNodes[2].childNodes[1].textContent = `${library[id].totalPages}`
+
+        book.childNodes[2].childNodes[0].classList = 'hidden'
+        book.childNodes[2].childNodes[2].classList = 'hidden'
+    } else {
+        book.childNodes[2].childNodes[1].textContent = `${library[id].currentPage}/${library[id].totalPages}`
+
+        book.childNodes[2].childNodes[0].classList = ''
+        book.childNodes[2].childNodes[2].classList = ''
+    }
 }
 
 for (let book of books) {

@@ -223,6 +223,10 @@ p {
     margin-bottom: 0.3rem;
 }
 
+.pages-div p {
+    margin: auto;
+}
+
 .pages-div button {
     outline: none;
     font-size: 1.8rem;
