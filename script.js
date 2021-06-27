@@ -7,7 +7,9 @@ let container = document.getElementById('container')
 let books = [
     new Book('Arthur Conan Doyle', 'Sherlock Holmes', 5000, 1, false),
     new Book('J.K. Rowling', 'Harry Potter', 512, 1, false),
-    new Book('Jordan B. Peterson', '12 Rules For Life', 412, 411, true)
+    new Book('Jordan B. Peterson', '12 Rules For Life', 412, 411, true),
+    new Book('George R. R. Martin', 'Game of Thrones', 1252, 114, false),
+    new Book('Simon Sinek', 'Together Is Better: A Little Book of Inspiration', 160, 1, false)
 ]
 
 let library = {}
@@ -167,8 +169,8 @@ function addBookToLibrary(id) {
     doneButton.addEventListener('click', function() {
         library[id].isRead = true
 
-        doneButton.classList.toggle('hidden')
-        readButtonDisabled.classList.toggle('hidden')
+        doneButton.classList = 'btn-primary hidden'
+        readButtonDisabled.classList = 'btn-disabled'
 
         pageLeftButton.classList = 'hidden'
         pageRightButton.classList = 'hidden'
@@ -406,19 +408,16 @@ function updateBook(id) {
     book.childNodes[0].childNodes[0].textContent = library[id].author
     book.childNodes[1].textContent = library[id].title
 
-
-
     if (library[id].isRead) {
         book.childNodes[3].childNodes[1].click()
-        // book.childNodes[2].childNodes[1].textContent = `${library[id].totalPages}`
-
-        // book.childNodes[2].childNodes[0].classList = 'hidden'
-        // book.childNodes[2].childNodes[2].classList = 'hidden'
     } else {
         book.childNodes[2].childNodes[1].textContent = `${library[id].currentPage}/${library[id].totalPages}`
 
         book.childNodes[2].childNodes[0].classList = ''
         book.childNodes[2].childNodes[2].classList = ''
+
+        book.childNodes[3].childNodes[1].classList = 'btn-primary'
+        book.childNodes[3].childNodes[2].classList = 'btn-disabled hidden'
     }
 }
 
