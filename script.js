@@ -116,18 +116,14 @@ function addBookToLibrary(id) {
         pageRightButtonInterval = setInterval(incPage, 200)
     })
 
-    pageRightButton.addEventListener('pointerup', function() {
-        clearInterval(pageRightButtonInterval)
-    })
-    pageRightButton.addEventListener('pointerleave', function() {
-        clearInterval(pageRightButtonInterval)
-    })
+    'pointerup pointerleave'.split(' ').forEach(function(event){
+        pageRightButton.addEventListener(event, function() {
+            clearInterval(pageRightButtonInterval)
+        })
 
-    pageLeftButton.addEventListener('pointerup', function() {
-        clearInterval(pageLeftButtonInterval)
-    })
-    pageLeftButton.addEventListener('pointerleave', function() {
-        clearInterval(pageLeftButtonInterval)
+        pageLeftButton.addEventListener(event, function() {
+            clearInterval(pageLeftButtonInterval)
+        })
     })
 
     // Buttons

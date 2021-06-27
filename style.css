@@ -8,6 +8,9 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+button {
+    -webkit-tap-highlight-color: transparent;
+}
 
 input, textarea {
     color: #525252;
@@ -201,6 +204,14 @@ p {
     text-shadow: 1px 1px 3px rgba(53, 53, 53, 0.376);
     border: 0.1rem solid #5252521f;
     border-radius: 10px;
+
+    /* non-selectable */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .pages-div button:hover {
