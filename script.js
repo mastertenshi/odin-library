@@ -28,7 +28,10 @@ function addBookToLibrary(id) {
     let deletePrompt = document.createElement('img')
     let deletePromptCancel = document.createElement('img')
     let title = document.createElement('p')
+    let pagesDiv = document.createElement('div')
+    let pageLeftButton = document.createElement('button')
     let pages = document.createElement('p')
+    let pageRightButton = document.createElement('button')
     let buttonsMain = document.createElement('div')
     let editButton = document.createElement('button')
     let doneButton = document.createElement('button')
@@ -40,6 +43,7 @@ function addBookToLibrary(id) {
     header.className = 'book-header'
     title.className = 'book-title'
     deletePromptCancel.className = 'hidden'
+    pagesDiv.className = 'pages-div'
     pages.className = 'book-pages'
     buttonsMain.className = 'book-buttons'
     editButton.classList = 'btn-secondary'
@@ -65,7 +69,36 @@ function addBookToLibrary(id) {
     title.textContent = library[id].title
 
     // Pages
+    pagesDiv.appendChild(pageLeftButton)
+    pagesDiv.appendChild(pages)
+    pagesDiv.appendChild(pageRightButton)
+
+    pageLeftButton.textContent = "<"
+    pageRightButton.textContent = ">"
     pages.textContent = `${library[id].currentPage}/${library[id].totalPages}`
+
+    pageLeftButton.addEventListener('click', function() {
+        let current = library[id].currentPage
+
+        if (current - 1 > 0) {
+            current--
+            library[id].currentPage = current
+
+            pages.textContent = `${current}/${library[id].totalPages}`
+        }
+    })
+
+    pageRightButton.addEventListener('click', function() {
+        let current = library[id].currentPage
+        let total = library[id].totalPages
+
+        if (current + 1 <= total) {
+            current++
+            library[id].currentPage = current
+
+            pages.textContent = `${current}/${total}`
+        }
+    })
 
     // Buttons
     editButton.textContent = 'EDIT'
@@ -92,7 +125,7 @@ function addBookToLibrary(id) {
 
     book.appendChild(header)
     book.appendChild(title)
-    book.appendChild(pages)
+    book.appendChild(pagesDiv)
     book.appendChild(buttonsMain)
     book.appendChild(buttonsDelete)
 
@@ -105,7 +138,7 @@ function addBookToLibrary(id) {
         deletePrompt.classList.toggle('hidden') // x.svg
         deletePromptCancel.classList.toggle('hidden') // dash.svg
         // book-pages
-        pages.classList.toggle('hidden')
+        pagesDiv.classList.toggle('hidden')
         // book-buttons
         buttonsMain.classList.toggle('hidden')
         buttonsDelete.classList.toggle('hidden')
@@ -154,10 +187,7 @@ function newBook() {
     titleInput.setAttribute('id', 'title-input')
     titleInput.setAttribute('required', '')
 
-    let exampleNumber = Math.floor((Math.random() * 890) + 101)
-
     totalInput.setAttribute('type', 'text')
-    totalInput.setAttribute('placeholder', `ex. ${exampleNumber.toString()}`)
     totalInput.setAttribute('required', '')
 
     currentInput.setAttribute('type', 'text')
@@ -220,8 +250,8 @@ function newBook() {
                 new Book(
                     authorInput.value,
                     titleInput.value,
-                    totalInput.value,
-                    currentInput.value)
+                    parseInt(totalInput.value),
+                    parseInt(currentInput.value))
 
             addBookToLibrary(Book.id - 1)
 
