@@ -258,7 +258,8 @@ p {
 
 .book-buttons {
     display: flex;
-    justify-content: space-around
+    justify-content: space-around;
+    align-items: center;
 }
 
 .new-book .book-buttons {
@@ -269,7 +270,6 @@ p {
     padding: 0.4rem 0;
     width: 70px;
     border-radius: 10rem;
-    cursor: pointer;
     border: none;
     outline: none;
     font-family: 'Poppins', sans-serif;
@@ -277,8 +277,18 @@ p {
     transition: ease 0.15s;
 }
 
-.book-buttons button:hover,
-.book-buttons button:focus {
+.btn-primary,
+.btn-secondary,
+.btn-delete {
+    cursor: pointer;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-delete:hover,
+.btn-delete:focus {
     transform: scale(1.1);
 }
 
@@ -319,4 +329,9 @@ p {
 
 .opacity-3 {
     opacity: 0.3;
+}
+
+.btn-disabled {
+    background-color: transparent;
+    color:rgb(88, 88, 88);
 }

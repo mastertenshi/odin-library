@@ -36,6 +36,7 @@ function addBookToLibrary(id) {
     let buttonsMain = document.createElement('div')
     let editButton = document.createElement('button')
     let doneButton = document.createElement('button')
+    let readButtonDisabled = document.createElement('button')
     let buttonsDelete = document.createElement('div')
     let cancelButton = document.createElement('button')
     let deleteButton = document.createElement('button')
@@ -51,6 +52,7 @@ function addBookToLibrary(id) {
     buttonsMain.className = 'book-buttons'
     editButton.classList = 'btn-secondary'
     doneButton.classList = 'btn-primary'
+    readButtonDisabled.classList = 'btn-disabled hidden'
     buttonsDelete.className = 'book-buttons hidden'
     cancelButton.classList = 'btn-secondary'
     deleteButton.classList = 'btn-delete'
@@ -84,6 +86,9 @@ function addBookToLibrary(id) {
 
         pageRightButton.classList.toggle('hidden')
         pageLeftButton.classList.toggle('hidden')
+
+        doneButton.classList.toggle('hidden')
+        readButtonDisabled.classList.toggle('hidden')
     } else {
         pages.textContent = `${library[id].currentPage}/${library[id].totalPages}`
     }
@@ -139,12 +144,14 @@ function addBookToLibrary(id) {
     // Buttons
     editButton.textContent = 'EDIT'
     doneButton.textContent = 'DONE'
+    readButtonDisabled.textContent = 'READ'
     cancelButton.textContent = 'CANCEL'
     deleteButton.textContent = 'DELETE'
 
     // -main
     buttonsMain.appendChild(editButton)
     buttonsMain.appendChild(doneButton)
+    buttonsMain.appendChild(readButtonDisabled)
 
     editButton.addEventListener('click', function() {
         newBook(
@@ -158,7 +165,15 @@ function addBookToLibrary(id) {
     })
 
     doneButton.addEventListener('click', function() {
+        library[id].isRead = true
 
+        doneButton.classList.toggle('hidden')
+        readButtonDisabled.classList.toggle('hidden')
+
+        pageLeftButton.classList = 'hidden'
+        pageRightButton.classList = 'hidden'
+
+        pages.textContent = `${library[id].totalPages}`
     })
 
     // -delete
@@ -391,11 +406,14 @@ function updateBook(id) {
     book.childNodes[0].childNodes[0].textContent = library[id].author
     book.childNodes[1].textContent = library[id].title
 
-    if (library[id].isRead) {
-        book.childNodes[2].childNodes[1].textContent = `${library[id].totalPages}`
 
-        book.childNodes[2].childNodes[0].classList = 'hidden'
-        book.childNodes[2].childNodes[2].classList = 'hidden'
+
+    if (library[id].isRead) {
+        book.childNodes[3].childNodes[1].click()
+        // book.childNodes[2].childNodes[1].textContent = `${library[id].totalPages}`
+
+        // book.childNodes[2].childNodes[0].classList = 'hidden'
+        // book.childNodes[2].childNodes[2].classList = 'hidden'
     } else {
         book.childNodes[2].childNodes[1].textContent = `${library[id].currentPage}/${library[id].totalPages}`
 
