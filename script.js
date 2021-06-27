@@ -77,27 +77,57 @@ function addBookToLibrary(id) {
     pageRightButton.textContent = ">"
     pages.textContent = `${library[id].currentPage}/${library[id].totalPages}`
 
-    pageLeftButton.addEventListener('click', function() {
+
+    let pageRightButtonInterval = null
+    let pageLeftButtonInterval = null
+
+    pageLeftButton.addEventListener('pointerdown', function() {
         let current = library[id].currentPage
 
-        if (current - 1 > 0) {
-            current--
-            library[id].currentPage = current
+        function decPage() {
+            if (current - 1 > 0) {
+                current--
+                library[id].currentPage = current
 
-            pages.textContent = `${current}/${library[id].totalPages}`
+                pages.textContent = `${current}/${library[id].totalPages}`
+            }
         }
+
+        decPage()
+
+        pageLeftButtonInterval = setInterval(decPage, 200)
     })
 
-    pageRightButton.addEventListener('click', function() {
+    pageRightButton.addEventListener('pointerdown', function() {
         let current = library[id].currentPage
         let total = library[id].totalPages
 
-        if (current + 1 <= total) {
-            current++
-            library[id].currentPage = current
+        function incPage() {
+            if (current + 1 <= total) {
+                current++
+                library[id].currentPage = current
 
-            pages.textContent = `${current}/${total}`
+                pages.textContent = `${current}/${total}`
+            }
         }
+
+        incPage()
+
+        pageRightButtonInterval = setInterval(incPage, 200)
+    })
+
+    pageRightButton.addEventListener('pointerup', function() {
+        clearInterval(pageRightButtonInterval)
+    })
+    pageRightButton.addEventListener('pointerleave', function() {
+        clearInterval(pageRightButtonInterval)
+    })
+
+    pageLeftButton.addEventListener('pointerup', function() {
+        clearInterval(pageLeftButtonInterval)
+    })
+    pageLeftButton.addEventListener('pointerleave', function() {
+        clearInterval(pageLeftButtonInterval)
     })
 
     // Buttons
@@ -109,6 +139,10 @@ function addBookToLibrary(id) {
     // -main
     buttonsMain.appendChild(editButton)
     buttonsMain.appendChild(doneButton)
+
+    doneButton.addEventListener('click', function() {
+
+    })
 
     // -delete
     cancelButton.addEventListener('click', toggleDeleteMenu)
@@ -208,7 +242,7 @@ function newBook() {
             if (total > 10000) {
                 totalInput.value = totalInput.value.slice(0, -1)
             } else {
-                currentInput.setAttribute('placeholder', `1-${total}`)
+                currentInput.setAttribute('placeholder', `1 - ${total}`)
 
                 // Keep Current page number < Total pages
                 while (parseInt(currentInput.value) > parseInt(totalInput.value)) {
