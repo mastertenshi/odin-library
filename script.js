@@ -5,19 +5,20 @@ let libraryContainer = document.getElementById('book-container')
 let container = document.getElementById('container')
 
 let books = [
-    new Book('Arthur Conan Doyle', 'Sherlock Holmes', 5000, 1,),
-    new Book('J.K. Rowling', 'Harry Potter', 512, 1),
-    new Book('Jordan B. Peterson', '12 Rules For Life', 412, 412)
+    new Book('Arthur Conan Doyle', 'Sherlock Holmes', 5000, 1, false),
+    new Book('J.K. Rowling', 'Harry Potter', 512, 1, false),
+    new Book('Jordan B. Peterson', '12 Rules For Life', 412, 411, true)
 ]
 
 let library = {}
 
 
-function Book(author, title, totalPages, currentPage) {
+function Book(author, title, totalPages, currentPage, isRead) {
     this.author = author
     this.title = title
     this.totalPages = totalPages
     this.currentPage = currentPage
+    this.isRead = isRead
 }
 Book.id = 0
 
@@ -103,7 +104,7 @@ function addBookToLibrary(id) {
         let total = library[id].totalPages
 
         function incPage() {
-            if (current + 1 <= total) {
+            if (current + 1 < total) {
                 current++
                 library[id].currentPage = current
 
@@ -136,9 +137,9 @@ function addBookToLibrary(id) {
     buttonsMain.appendChild(editButton)
     buttonsMain.appendChild(doneButton)
 
-    doneButton.addEventListener('click', function() {
+    // doneButton.addEventListener('click', function() {
 
-    })
+    // })
 
     // -delete
     cancelButton.addEventListener('click', toggleDeleteMenu)
@@ -187,6 +188,9 @@ function newBook() {
     let authorInput = document.createElement('textarea')
     let titleLabel = document.createElement('label')
     let titleInput = document.createElement('textarea')
+    let completed = document.createElement('div')
+    let completedLabel = document.createElement('label')
+    let completedCheckbox = document.createElement('input')
     let totalLabel = document.createElement('label')
     let totalInput = document.createElement('input')
     let currentLabel = document.createElement('label')
@@ -197,12 +201,14 @@ function newBook() {
 
     blockContainer.className = 'block-container'
     newBook.className = 'new-book'
+    completed.className = 'completed'
     buttons.className = 'book-buttons'
     addButton.className = 'btn-primary'
     cancelButton.className = 'btn-secondary'
 
     authorLabel.textContent = 'Author'
     titleLabel.textContent = 'Title'
+    completedLabel.textContent = 'Completed'
     totalLabel.textContent = 'Total Pages'
     currentLabel.textContent = 'Current Page'
     addButton.textContent = 'ADD'
@@ -216,6 +222,15 @@ function newBook() {
     titleInput.setAttribute('maxlength', '80')
     titleInput.setAttribute('id', 'title-input')
     titleInput.setAttribute('required', '')
+
+    completedCheckbox.setAttribute('type', 'checkbox')
+    completedCheckbox.setAttribute('id', 'complete')
+
+    completedLabel.setAttribute('for', 'complete')
+
+
+    completed.appendChild(completedLabel)
+    completed.appendChild(completedCheckbox)
 
     totalInput.setAttribute('type', 'text')
     totalInput.setAttribute('required', '')
@@ -281,7 +296,10 @@ function newBook() {
                     authorInput.value,
                     titleInput.value,
                     parseInt(totalInput.value),
-                    parseInt(currentInput.value))
+                    parseInt(currentInput.value),
+                    completedCheckbox.checked)
+
+            console.log(completedCheckbox.checked)
 
             addBookToLibrary(Book.id - 1)
 
@@ -298,6 +316,7 @@ function newBook() {
     newBook.appendChild(totalInput)
     newBook.appendChild(currentLabel)
     newBook.appendChild(currentInput)
+    newBook.appendChild(completed)
     newBook.appendChild(buttons)
 
     buttons.appendChild(addButton)

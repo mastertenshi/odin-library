@@ -8,7 +8,8 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
-button, img {
+button, img,
+.new-book label {
     -webkit-tap-highlight-color: transparent;
 
     /* non-selectable */
@@ -152,6 +153,27 @@ p {
     background-color: #b4e087;
     margin-bottom: 16px;
     font-size: 1rem;
+}
+
+.new-book .completed {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 2px 0;
+    /* margin-right: 1rem; */
+    border-top: 2px solid #9DCF6A;
+    border-bottom: 2px solid #9DCF6A;
+    border-radius: 2px;
+}
+
+.completed input,
+.completed label {
+    cursor: pointer;
+}
+
+.new-book div input {
+    margin: 0;
 }
 
 .new-book input:focus{
